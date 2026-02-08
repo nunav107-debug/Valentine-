@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine 💖</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    overflow: hidden;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 360px;
+    position: relative;
+}
+
+h1 {
+    color: #ff4d6d;
+    font-size: 24px;
+}
+
+p {
+    font-size: 16px;
+}
+
+button {
+    padding: 14px 22px;
+    font-size: 16px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    margin: 10px;
+    transition: transform 0.3s ease;
+}
+
+#bigYes {
+    background: #ff4d6d;
+    color: white;
+    font-size: 18px;
+}
+
+#sneakyYes {
+    background: #ddd;
+    position: fixed;
+}
+
+.heart, .confetti {
+    position: fixed;
+    font-size: 22px;
+    animation: float 3s linear forwards;
+}
+
+@keyframes float {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-150px); opacity: 0; }
+}
+
+/* POPUP STYLES */
+.popup-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.popup {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    text-align: center;
+    width: 80%;
+    max-width: 300px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="card">
+    <p>Loading something special… 💖</p>
+</div>
+
+<!-- POPUP -->
+<div class="popup-bg" id="popupBg">
+    <div class="popup">
+        <h1>YAY!!! 💕</h1>
+        <p>You just made me incredibly happy 😍</p>
+        <button id="popupBtn">OK 💖</button>
+    </div>
+</div>
+
+<audio id="music" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const name = params.get("name") || "Love";
+
+const card = document.getElementById("card");
+const popupBg = document.getElementById("popupBg");
+const popupBtn = document.getElementById("popupBtn");
+const music = document.getElementById("music");
+
+// Reveal after loading
+setTimeout(() => {
+    card.innerHTML = `
+        <h1>Will you be my Valentine, ${name}? 💘</h1>
+        <p>(Tap anywhere to start music 🎵)</p>
+        <button id="bigYes">Obviously Yes 💖</button>
+        <button id="sneakyYes">Yes 😶</button>
+    `;
+
+    const bigYes = document.getElementById("bigYes");
+    const sneakyYes = document.getElementById("sneakyYes");
+
+    let scale = 1;
+    let rotation = 0;
+
+    function dodgeSneakyYes() {
+        scale -= 0.1;
+        rotation += 45;
+        sneakyYes.style.left = Math.random() * (window.innerWidth - 100) + "px";
+        sneakyYes.style.top = Math.random() * (window.innerHeight - 50) + "px";
+        sneakyYes.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
+        if (scale <= 0.3) sneakyYes.style.display = "none";
+    }
+
+    sneakyYes.addEventListener("mouseover", dodgeSneakyYes);
+    sneakyYes.addEventListener("touchstart", dodgeSneakyYes);
+
+    bigYes.addEventListener("click", () => {
+        popupBg.style.display = "flex";
+    });
+}, 1500);
+
+// Popup OK button
+popupBtn.addEventListener("click", () => {
+    popupBg.style.display = "none";
+    card.innerHTML = `
+    <h1>Happy Propose Day Missy ❤️</h1>
+
+    <p>
+        No matter how many times we fight, I am never going to stop loving you.
+        I will never give up on us. I will love you forever. 💕
+    </p>
+
+    <p>
+        I want to spend my today, tomorrow, my entire life with you. 🥺✨
+    </p>
+
+    <p>
+        I love you Babe ❤️
+    </p>
+
+    <p>
+        Always and forever ❤️♾️
+    </p>
+
+    <p>📸 Screenshot this moment 💖</p>
+`;
+
+    explodeLove();
+});
+
+// Music (mobile safe)
+document.body.addEventListener("click", () => {
+    music.play().catch(()=>{});
+}, { once: true });
+
+function explodeLove() {
+    for (let i = 0; i < 60; i++) {
+        const el = document.createElement("div");
+        el.className = Math.random() > 0.5 ? "heart" : "confetti";
+        el.innerHTML = Math.random() > 0.5 ? "❤️" : "🎉";
+        el.style.left = Math.random() * window.innerWidth + "px";
+        el.style.top = Math.random() * window.innerHeight + "px";
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3000);
+    }
+}
+</script>
+
+</body>
+</html>
